@@ -75,3 +75,54 @@ function reverseFirstHalf(arr) {
     return arr;
 }
 ```
+
+---
+
+## Problem 4: Stable Even-Odd Partition (Order Preserved)
+
+**Array:** `[3, 8, 2, 7, 4, 6, 1]`
+
+**Task:** Separate even and odd numbers such that:
+- All even numbers come first
+- All odd numbers come after
+
+**Why not swap?**
+Swapping disturbs the relative order of one side. Since stability is required, swapping is dangerous — we need a different approach.
+
+**Strategy:**
+1. Create a new result array
+2. First pass — copy all evens in order
+3. Second pass — copy all odds in order
+
+This guarantees full stability with no overwriting, no shifting, no swaps.
+
+```js
+function evenFirstStable(arr) {
+    let n = arr.length
+    let result = new Array(n)
+    let index = 0
+
+    // First pass: copy evens
+    for (let i = 0; i < n; i++) {
+        if (arr[i] % 2 === 0) {
+            result[index] = arr[i]
+            index++
+        }
+    }
+
+    // Second pass: copy odds
+    for (let i = 0; i < n; i++) {
+        if (arr[i] % 2 !== 0) {
+            result[index] = arr[i]
+            index++
+        }
+    }
+
+    return result
+}
+```
+
+**Why this works:**
+- First loop copies evens in their original sequence
+- Second loop copies odds in their original sequence
+- Pure controlled writing — index only moves forward
