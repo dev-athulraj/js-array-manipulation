@@ -236,7 +236,6 @@ This is called the **Running Comparison Pattern**, used in:
 ## 9. Manual Filter (Create New Array)
 
 Goal: Keep only numbers greater than `5`.
-
 ```js
 let newArr = []
 let newIndex = 0
