@@ -126,3 +126,59 @@ function evenFirstStable(arr) {
 - First loop copies evens in their original sequence
 - Second loop copies odds in their original sequence
 - Pure controlled writing — index only moves forward
+
+---
+
+---
+
+## Problem 5: Reverse the Second Half (First Half Unchanged)
+
+**Array:** `[1, 2, 3, 4, 5, 6]`
+
+**Task:** Reverse only the second half of the array. Leave the first half exactly as it is.
+
+**Strategy:**
+- Find the midpoint using `Math.floor(n / 2)` — this is where the second half begins
+- Place `left` pointer at mid, `right` pointer at last index
+- Swap inward using Two Pointer until they meet
+
+```js
+function reverseSecondHalf(arr) {
+    let n = arr.length
+    let left = Math.floor(n / 2)
+    let right = n - 1
+
+    while (left < right) {
+        let temp = arr[left]
+        arr[left] = arr[right]
+        arr[right] = temp
+        left++
+        right--
+    }
+
+    return arr
+}
+```
+
+**Trace through `[1, 2, 3, 4, 5, 6]`:**
+
+| Step | left | right | Array state |
+|------|------|-------|-------------|
+| Start | 3 | 5 | `[1, 2, 3, 4, 5, 6]` |
+| Swap index 3 & 5 | 4 | 4 | `[1, 2, 3, 6, 5, 4]` |
+| left === right, stop | — | — | `[1, 2, 3, 6, 5, 4]` |
+
+**Result:** `[1, 2, 3, 6, 5, 4]`
+
+**Why `Math.floor(n / 2)`?**
+
+| Array length | Mid index | First half | Second half |
+|--------------|-----------|------------|-------------|
+| Even (6) | 3 | index 0–2 | index 3–5 |
+| Odd (5) | 2 | index 0–1 | index 2–4 |
+
+For odd-length arrays, the middle element belongs to the second half and gets included in the reversal.
+
+**Pattern:** Bounded Two Pointer — same as Problem 3, but anchored to the second half instead of the first.
+
+**Connects to:** Subarray operations, rotating arrays, palindrome checks on subarrays.
