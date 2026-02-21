@@ -182,3 +182,65 @@ For odd-length arrays, the middle element belongs to the second half and gets in
 **Pattern:** Bounded Two Pointer — same as Problem 3, but anchored to the second half instead of the first.
 
 **Connects to:** Subarray operations, rotating arrays, palindrome checks on subarrays.
+
+---
+
+## Problem 6: Reverse the Middle (First and Last Unchanged)
+
+**Task:** Reverse the array except the first and last elements. Leave index `0` and index `n-1` untouched.
+
+**Strategy:**
+- Start `left` pointer at index `1` (one after first)
+- Start `right` pointer at index `n - 2` (one before last)
+- Swap inward using Two Pointer until they meet
+
+```js
+function reverseMiddle(arr) {
+    if (arr.length < 3) return arr
+
+    let start = 1
+    let end = arr.length - 2
+
+    while (start < end) {
+        let temp = arr[start]
+        arr[start] = arr[end]
+        arr[end] = temp
+        start++
+        end--
+    }
+
+    return arr
+}
+```
+
+**Trace through `[1, 2, 3, 4, 5, 6]`:**
+
+| Step | start | end | Array state |
+|------|-------|-----|-------------|
+| Start | 1 | 4 | `[1, 2, 3, 4, 5, 6]` |
+| Swap index 1 & 4 | 2 | 3 | `[1, 5, 3, 4, 2, 6]` |
+| Swap index 2 & 3 | 3 | 2 | `[1, 5, 4, 3, 2, 6]` |
+| start >= end, stop | — | — | `[1, 5, 4, 3, 2, 6]` |
+
+**Result:** `[1, 5, 4, 3, 2, 6]`
+
+**Why `arr.length < 3` guard?**
+
+| Array | Reason |
+|-------|--------|
+| `[]` | Nothing to reverse |
+| `[1]` | Only one element, no middle exists |
+| `[1, 2]` | Only first and last, no middle exists |
+
+Anything less than 3 elements has no middle — return as is.
+
+**Comparison of bounded Two Pointer problems so far:**
+
+| Problem | left starts at | right starts at |
+|---------|---------------|-----------------|
+| Full reverse | `0` | `n - 1` |
+| Reverse first half | `0` | `mid - 1` |
+| Reverse second half | `mid` | `n - 1` |
+| Reverse middle | `1` | `n - 2` |
+
+**Pattern:** Bounded Two Pointer with anchor exclusion — you control exactly which segment gets reversed by choosing where `left` and `right` start.
