@@ -299,3 +299,139 @@ arr[0] = last
 **Pattern:** Single-save shift — same core idea as Insert at Beginning from the concepts guide, but wrapping instead of inserting.
 
 **Connects to:** Rotate by k steps, circular buffers, sliding window problems.
+
+---
+
+## Problem 8: Rotate Array Right by K Steps (O(n) Reversal Algorithm)
+
+**Array:** `[1, 2, 3, 4, 5, 6, 7]`
+**k:** `3`
+
+**Task:** Rotate the array to the right by `k` positions efficiently.
+
+**Why not repeat Problem 7 k times?**
+
+Repeating the single-step shift `k` times costs O(n × k) — inefficient for large `k`.
+We need O(n).
+
+---
+
+### Strategy: Three Reversals
+
+Break the array into two blocks:
+
+| Block | Elements |
+|-------|----------|
+| Left | `[1, 2, 3, 4]` |
+| Right | `[5, 6, 7]` |
+
+Goal is: **Right block + Left block** = `[5, 6, 7, 1, 2, 3, 4]`
+
+Instead of moving blocks around, we use 3 targeted reversals.
+
+---
+
+### Step-by-Step Walkthrough
+```
+n = 7, k = 3 % 7 = 3
+```
+
+**Step 1 — Reverse entire array:**
+```
+[1, 2, 3, 4, 5, 6, 7]  →  [7, 6, 5, 4, 3, 2, 1]
+```
+
+**Step 2 — Reverse first k elements (index 0 to k-1):**
+```
+[7, 6, 5, 4, 3, 2, 1]  →  [5, 6, 7, 4, 3, 2, 1]
+```
+
+**Step 3 — Reverse remaining elements (index k to n-1):**
+```
+[5, 6, 7, 4, 3, 2, 1]  →  [5, 6, 7, 1, 2, 3, 4]  ✅
+```
+
+---
+
+### Implementation
+```js
+function rotateRight(arr, k) {
+    let n = arr.length
+
+    if (n <= 1) return arr
+
+    k = k % n   // handles k > n
+
+    reverse(arr, 0, n - 1)   // Step 1: reverse entire array
+    reverse(arr, 0, k - 1)   // Step 2: reverse first k elements
+    reverse(arr, k, n - 1)   // Step 3: reverse remaining elements
+
+    return arr
+}
+
+function reverse(arr, left, right) {
+    while (left < right) {
+        let temp = arr[left]
+        arr[left] = arr[right]
+        arr[right] = temp
+        left++
+        right--
+    }
+}
+```
+
+---
+
+### Trace Through Each Reversal
+
+| Step | Range reversed | Array state |
+|------|---------------|-------------|
+| Initial | — | `[1, 2, 3, 4, 5, 6, 7]` |
+| Step 1 | index 0 → 6 | `[7, 6, 5, 4, 3, 2, 1]` |
+| Step 2 | index 0 → 2 | `[5, 6, 7, 4, 3, 2, 1]` |
+| Step 3 | index 3 → 6 | `[5, 6, 7, 1, 2, 3, 4]` |
+
+---
+
+### Why `k = k % n`?
+
+Rotating an array of length `7` by `7` brings you back to the start — same as rotating by `0`. So any `k` larger than `n` is redundant.
+
+| n | k | k % n | Effect |
+|---|---|-------|--------|
+| 7 | 3 | 3 | Rotate by 3 |
+| 7 | 7 | 0 | No change |
+| 7 | 10 | 3 | Same as rotating by 3 |
+
+---
+
+### Why This Works
+```
+Rotate right by k  =  Reverse whole
+                    + Reverse first k elements
+                    + Reverse remaining elements
+```
+
+Three reversals reposition the blocks without any extra space. Each element is touched a constant number of times — that's why it's O(n).
+
+---
+
+### Complexity
+
+| | Value |
+|-|-------|
+| Time | O(n) |
+| Space | O(1) |
+
+---
+
+### Evolution of rotate problems in this guide
+
+| Problem | Method | Time complexity |
+|---------|--------|----------------|
+| Problem 7 | Single save + shift | O(n) for k=1 |
+| Problem 8 | Three reversals | O(n) for any k |
+
+**Pattern:** Reversal Algorithm — reposition array blocks using targeted reversals with zero extra space.
+
+**Connects to:** String rotations, linked list rotations, advanced partition problems, subarray manipulation.
