@@ -244,3 +244,58 @@ Anything less than 3 elements has no middle — return as is.
 | Reverse middle | `1` | `n - 2` |
 
 **Pattern:** Bounded Two Pointer with anchor exclusion — you control exactly which segment gets reversed by choosing where `left` and `right` start.
+
+---
+
+## Problem 7: Rotate Array Right by 1
+
+**Array:** `[3, 8, 2, 7, 4, 6, 1]`
+
+**Task:** Rotate the array to the right by one position. The last element wraps around to the front.
+
+**Strategy:**
+- Save the last element before it gets overwritten
+- Shift every element one position to the right (loop backwards)
+- Place the saved element at index `0`
+
+**Why loop backwards?**
+If we go forward, we overwrite `arr[1]` with `arr[0]` before `arr[1]` is saved — corrupting the data. Going backwards ensures each value is safely moved before its slot is overwritten.
+
+```js
+let arr = [3, 8, 2, 7, 4, 6, 1]
+let n = arr.length
+let last = arr[n - 1]
+
+for (let i = n - 1; i > 0; i--) {
+    arr[i] = arr[i - 1]
+}
+
+arr[0] = last
+```
+
+**Trace through `[3, 8, 2, 7, 4, 6, 1]`:**
+
+| Step | Action | Array state |
+|------|--------|-------------|
+| Save last | `last = 1` | `[3, 8, 2, 7, 4, 6, 1]` |
+| i = 6 | `arr[6] = arr[5]` | `[3, 8, 2, 7, 4, 6, 6]` |
+| i = 5 | `arr[5] = arr[4]` | `[3, 8, 2, 7, 4, 4, 6]` |
+| i = 4 | `arr[4] = arr[3]` | `[3, 8, 2, 7, 7, 4, 6]` |
+| i = 3 | `arr[3] = arr[2]` | `[3, 8, 2, 2, 7, 4, 6]` |
+| i = 2 | `arr[2] = arr[1]` | `[3, 8, 8, 2, 7, 4, 6]` |
+| i = 1 | `arr[1] = arr[0]` | `[3, 3, 8, 2, 7, 4, 6]` |
+| Place last | `arr[0] = 1` | `[1, 3, 8, 2, 7, 4, 6]` |
+
+**Result:** `[1, 3, 8, 2, 7, 4, 6]`
+
+**Direction rule summary so far:**
+
+| Operation | Direction | Reason |
+|-----------|-----------|--------|
+| Insert at beginning | Backwards | Shift right without overwriting |
+| Remove at index | Forwards | Shift left without overwriting |
+| Rotate right by 1 | Backwards | Shift right without overwriting |
+
+**Pattern:** Single-save shift — same core idea as Insert at Beginning from the concepts guide, but wrapping instead of inserting.
+
+**Connects to:** Rotate by k steps, circular buffers, sliding window problems.
