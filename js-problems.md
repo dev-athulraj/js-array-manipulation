@@ -435,3 +435,83 @@ Three reversals reposition the blocks without any extra space. Each element is t
 **Pattern:** Reversal Algorithm — reposition array blocks using targeted reversals with zero extra space.
 
 **Connects to:** String rotations, linked list rotations, advanced partition problems, subarray manipulation.
+
+---
+
+## 📌 Notes: Understanding Array Rotation (Left vs Right)
+
+---
+
+### Comparing Left and Right Rotation
+
+Both use the same three-reversal technique — only the **order of steps differs**.
+
+| Step | Right Rotation by k | Left Rotation by k |
+|------|--------------------|--------------------|
+| 1 | Reverse entire array | Reverse first k elements |
+| 2 | Reverse first k elements | Reverse remaining elements |
+| 3 | Reverse remaining elements | Reverse entire array |
+
+Same building blocks. Different order. Different direction.
+
+---
+
+### Why `k = k % n` Is Always Required
+
+Rotation is **cyclic** — after `n` steps you're back where you started.
+
+For an array of length `n = 7`:
+
+| Rotation amount | Result |
+|----------------|--------|
+| Rotate left by 7 | Identical to original |
+| Rotate left by 14 | Identical to original |
+| Rotate left by 21 | Identical to original |
+
+All multiples of `n` bring you back to the start — they are wasted work.
+
+---
+
+### What Modulo Actually Does
+
+```js
+k = k % n
+```
+
+Collapses any `k` into the range `0 ≤ k < n`:
+```
+Rotation by k  =  Rotation by (k % n)
+```
+
+**Example:**
+```
+n = 7
+k = 10
+
+k % n = 10 % 7 = 3
+```
+
+Rotating by `10` is identical to rotating by `3`. Modulo eliminates the redundant full cycles.
+
+---
+
+### Edge Case: When `k = 0` or `k % n = 0`
+
+```js
+k = k % n
+if (k === 0) return arr  // nothing to do
+```
+
+If `k` reduces to `0`, the array is already in its final state. Recognizing this early avoids three unnecessary reversal passes.
+
+---
+
+### Full Pattern Summary
+```
+Right rotation  =  Reverse whole  →  Reverse first k  →  Reverse rest
+Left rotation   =  Reverse first k  →  Reverse rest  →  Reverse whole
+```
+
+Both run in **O(n) time, O(1) space** — professional grade solutions used in real interviews.
+
+**Connects to:** String rotations, linked list rotations, circular buffer management, sliding window problems.
