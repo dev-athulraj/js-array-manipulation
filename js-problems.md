@@ -514,4 +514,89 @@ Left rotation   =  Reverse first k  →  Reverse rest  →  Reverse whole
 
 Both run in **O(n) time, O(1) space** — professional grade solutions used in real interviews.
 
-**Connects to:** String rotations, linked list rotations, circular buffer management, sliding window problems.
+**Connects to:** String rotations, linked list rotations, circular buffer management, sliding window problems. 
+
+---
+
+### Handling Negative k (Rotating in Opposite Direction)
+
+A negative `k` means rotate in the **opposite direction**.
+```
+Rotate left by -2  =  Rotate right by 2  =  Rotate left by (n - 2)
+```
+
+All three are equivalent — same final position.
+
+---
+
+### Why Simple Modulo Isn't Enough
+
+In JavaScript, modulo preserves the sign of the number:
+
+```js
+-2 % 5 === -2   // not 3
+```
+
+So `k % n` alone can give you a negative result, which breaks your reversal index calculations.
+
+---
+
+### Correct Normalization Formula
+
+Always normalize `k` like this:
+
+```js
+k = k % n
+if (k < 0) k += n
+```
+
+This guarantees `0 ≤ k < n` for any input — positive, negative, or larger than `n`.
+
+---
+
+### Walkthrough: n = 5, k = -2
+
+| Step | Operation | Result |
+|------|-----------|--------|
+| Step 1 | `k = -2 % 5` | `k = -2` (JS keeps sign) |
+| Step 2 | `k = -2 + 5` | `k = 3` |
+
+So rotating left by `-2` becomes rotating left by `3`.
+
+**Why this works — circular arithmetic:**
+```
+-2 ≡ 3 (mod 5)
+
+Moving backward 2  =  Moving forward 3
+```
+
+Same final position on the circle.
+
+---
+
+### Visual Proof
+```
+[1, 2, 3, 4, 5]
+```
+
+Rotate left by `-2` (same as rotate right by `2`):
+```
+[4, 5, 1, 2, 3]
+```
+
+Rotate left by `3`:
+```
+[4, 5, 1, 2, 3]
+```
+
+Identical results. ✅
+
+### Key Takeaway
+```
+k = k % n
+if (k < 0) k += n
+```
+
+Two lines. Handles every edge case. Always include both when writing rotation code.
+
+This makes your solution **mathematically complete** for any integer `k`.
