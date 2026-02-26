@@ -4,6 +4,6 @@ A practical guide to understanding arrays in JavaScript by building everything f
 
 ---
 
-📖 [Array Concepts & Implementations](./ARRAY-CONCEPTS.md)
+📖 [Array Concepts & Implementations](./Array-Concepts.md)
 
 🧩 [Practice Problems & Solutions](./js-problems-concepts.md)
